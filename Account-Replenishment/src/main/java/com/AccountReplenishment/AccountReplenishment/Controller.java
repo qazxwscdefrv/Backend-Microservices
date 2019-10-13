@@ -1,33 +1,67 @@
 package com.AccountReplenishment.AccountReplenishment;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/rep")
 public class Controller {
+    @Autowired
+    Repository repository;
     @GetMapping
     public String get(){
         return "Hello, World";
     }
-    @GetMapping("/{id}")
-    public Replenishment getInfoAboutRep(
-            @PathVariable ("id") String id){
-        List<Replenishment> list =  Arrays.asList(
-                new Replenishment("1", "1","15$","1632-1523-1536-1235"),
-                new Replenishment("2", "2","15$","1632-1523-1536-1235"));
-        for (Replenishment repList : list) {
-            if (repList.id.equals(id)) {
-                return repList;
-            }
-        }
-        return null;
+
+    @GetMapping("/all")
+    public List<Replenishment> allRent(){
+        return repository.findAll();
     }
+    @PostMapping("/add")
+    public Replenishment createRent(@Valid @RequestBody Replenishment replenishment) {
+        return repository.save(replenishment);
+    }
+    @GetMapping("/reps/{id}")
+    public Replenishment getById(@PathVariable(value = "id") Long replenishmentID)
+            throws ResourceNotFoundException {
+        Replenishment replenishment= repository.findById(replenishmentID)
+                .orElseThrow(() -> new ResourceNotFoundException(" not found for this id :: " + replenishmentID));
+        return replenishment;
+    }
+    @PutMapping("/reps/{id}")
+    public ResponseEntity<Replenishment> update(@PathVariable(value = "id") Long replenishmentID,
+                                               @Valid @RequestBody Replenishment replenishmentDetails) throws ResourceNotFoundException {
+        Replenishment replenishment = repository.findById(replenishmentID)
+                .orElseThrow(() -> new ResourceNotFoundException(" not found for this id :: " + replenishmentID));
+
+        replenishment.setUserID(replenishmentDetails.getUserID());
+        replenishment.setAmount(replenishmentDetails.getAmount());
+        replenishment.setCardNumber(replenishmentDetails.getCardNumber());
+
+        final Replenishment updated = repository.save(replenishment);
+        return ResponseEntity.ok(updated);
+    }
+
+    @DeleteMapping("/reps/{id}")
+    public Map<String, Boolean> delete(@PathVariable(value = "id") Long replenishmentID)
+            throws ResourceNotFoundException {
+        Replenishment replenishment = repository.findById(replenishmentID)
+                .orElseThrow(() -> new ResourceNotFoundException(" not found for this id :: " + replenishmentID));
+
+        repository.delete(replenishment);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", Boolean.TRUE);
+        return response;
+    }
+
 
 
 }

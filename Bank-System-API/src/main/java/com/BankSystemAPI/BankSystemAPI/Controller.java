@@ -2,16 +2,15 @@ package com.BankSystemAPI.BankSystemAPI;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import javax.validation.Valid;
+import java.util.*;
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api")
 public class Controller {
@@ -23,6 +22,49 @@ public class Controller {
     @Autowired
     private RestTemplate restTemplate;
 
+    @GetMapping
+    public String getStr(){
+        Replenishment result = restTemplate.postForObject("http://localhost:8082/rep/add",
+                new Replenishment("1","1", "34$", "789456"), Replenishment.class);
+        Payment pay= restTemplate.postForObject("http://localhost:8084/payment/add",
+                new Payment("1","1","21$","12423","52"), Payment.class);
+        SendingMoney sm= restTemplate.postForObject("http://localhost:8084/sending/add",
+                new SendingMoney("1","1","53$","5698","5223"),SendingMoney.class);
+
+        return "It's Catalog page";
+
+    }
+    @GetMapping("/all")
+    public List<Replenishment> getAllGames() {
+        ResponseEntity<List<Replenishment>> rateResponse =
+                restTemplate.exchange("http://localhost:8082/rep/all",
+                        HttpMethod.GET, null, new ParameterizedTypeReference<List<Replenishment>>() {
+                        });
+        List<Replenishment> rates = rateResponse.getBody();
+        return rates;
+    }
+
+    @GetMapping("rep/{id}")
+    public Replenishment getGames(@PathVariable Long id) {
+        Replenishment  game = restTemplate.getForObject(
+                "http://localhost:8082/rep/reps/"+id,
+                Replenishment.class);
+        return game;
+    }
+    @PostMapping("/rep/reps")
+    public Replenishment createNote(@Valid @RequestBody Replenishment game) {
+        return restTemplate.postForObject("http://localhost:8082/rep/add",
+                game, Replenishment.class);
+    }
+
+    @DeleteMapping("/rep/{id}")
+    public Boolean delete(@PathVariable String id) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("id", id);
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.delete("http://localhost:8082/reps/"+id, params);
+        return true;
+    }
 
     @GetMapping("/{id}")
     public List<Catalog> getAllDates(

@@ -1,32 +1,22 @@
-package com.AccountReplenishment.AccountReplenishment;
+package com.BankSystemAPI.BankSystemAPI;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import javax.persistence.*;
-
-@Getter
-@Setter
-@Entity
-@Table(name = "Account_Replenishment")
 public class Replenishment {
     public Replenishment() {
     }
 
-    public Replenishment(String userID, String amount, String cardNumber) {
+    public Replenishment(String id, String userID, String amount, String cardNumber) {
+        this.id = id;
         this.userID = userID;
         this.amount = amount;
         this.cardNumber = cardNumber;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public Long id;
+    public String id;
     public String userID;
     public String amount;
     public String cardNumber;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
@@ -40,21 +30,5 @@ public class Replenishment {
 
     public String getCardNumber() {
         return cardNumber;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setUserID(String userID) {
-        this.userID = userID;
-    }
-
-    public void setAmount(String amount) {
-        this.amount = amount;
-    }
-
-    public void setCardNumber(String cardNumber) {
-        this.cardNumber = cardNumber;
     }
 }
