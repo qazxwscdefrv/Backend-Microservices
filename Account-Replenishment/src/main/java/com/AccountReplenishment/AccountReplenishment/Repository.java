@@ -1,4 +1,7 @@
 package com.AccountReplenishment.AccountReplenishment;
 
-public interface Repository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+@org.springframework.stereotype.Repository
+public interface Repository extends JpaRepository<Replenishment, Long> {
 }
