@@ -1,22 +1,24 @@
-package com.Payment.Payment;
+package kz.iitu.jd3.kafka;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
 
 @Getter
 @Setter
-@Entity
-@Table(name = "Payment")
-public class Payment {
-    public Payment() {
+
+public class Product {
+    public Product() {
     }
 
+    public Product(String userId, String amount, String cardNumber, String productId, String date) {
+        this.userId = userId;
+        this.amount = amount;
+        this.cardNumber = cardNumber;
+        ProductId = productId;
+        this.date = date;
+    }
 
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     public Long id;
     public String userId;
     public String amount;
@@ -74,7 +76,7 @@ public class Payment {
 
     @Override
     public String toString() {
-        return "Payment{" +
+        return "Product{" +
                 "id=" + id +
                 ", userId='" + userId + '\'' +
                 ", amount='" + amount + '\'' +

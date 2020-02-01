@@ -4,6 +4,7 @@ package com.BankSystemAPI.BankSystemAPI.Services;
 import com.BankSystemAPI.BankSystemAPI.Payment;
 import com.BankSystemAPI.BankSystemAPI.Replenishment;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.ParameterizedTypeReference;
@@ -27,7 +28,10 @@ public class InfoService {
     }
 
 
-    @HystrixCommand(fallbackMethod = "getAll_Fallback")
+    @HystrixCommand(fallbackMethod = "getAll_Fallback", threadPoolKey = "licenseByOrgThreadPool",
+            threadPoolProperties =
+                    {@HystrixProperty(name = "coreSize",value="30"),
+                            @HystrixProperty(name="maxQueueSize", value="10")} )
     public List<Replenishment> getAll() {
         ResponseEntity<List<Replenishment>> rateResponse =
                 restTemplate.exchange("http://localhost:8082/rep/all",
@@ -36,7 +40,10 @@ public class InfoService {
         List<Replenishment> rates = rateResponse.getBody();
         return rates;
     }
-    @HystrixCommand(fallbackMethod = "get_Fallback")
+    @HystrixCommand(fallbackMethod = "get_Fallback", threadPoolKey = "licenseByOrgThreadPool",
+            threadPoolProperties =
+                    {@HystrixProperty(name = "coreSize",value="30"),
+                            @HystrixProperty(name="maxQueueSize", value="10")} )
     public Replenishment getRep(@PathVariable Long id) {
         Replenishment  game = restTemplate.getForObject(
                 "http://localhost:8082/rep/reps/"+id,
@@ -44,7 +51,10 @@ public class InfoService {
         return game;
     }
 
-    @HystrixCommand(fallbackMethod = "getId_Fallback")
+    @HystrixCommand(fallbackMethod = "getId_Fallback", threadPoolKey = "licenseByOrgThreadPool",
+            threadPoolProperties =
+                    {@HystrixProperty(name = "coreSize",value="30"),
+                            @HystrixProperty(name="maxQueueSize", value="10")} )
     public Replenishment getId(@PathVariable String userID) {
         Replenishment  game = restTemplate.getForObject(
                 "http://localhost:8082/rep/reps/byUserId/"+userID,

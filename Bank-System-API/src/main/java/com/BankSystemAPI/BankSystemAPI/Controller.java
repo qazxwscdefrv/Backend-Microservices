@@ -36,10 +36,10 @@ public class Controller {
     public Replenishment getId(@PathVariable String userID){
         return infoService.getId(userID);
     }
-    @GetMapping("payment/byUserId/{userID}")
-    public Payment getPaymnent(@PathVariable String userID){
-        return infoService.getPayment(userID);
-    }
+//    @GetMapping("payment/byUserId/{userID}")
+//    public Payment getPaymnent(@PathVariable String userID){
+//        return infoService.getPayment(userID);
+//    }
 
 //    @Bean
 //    public RestTemplate restTemplate() {

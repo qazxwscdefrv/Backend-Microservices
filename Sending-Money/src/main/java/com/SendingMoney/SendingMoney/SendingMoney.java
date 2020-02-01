@@ -14,7 +14,7 @@ public class SendingMoney {
     }
 
     public SendingMoney(String userId, String amount, String cardNumber, String receiverCardNumber) {
-        UserId = userId;
+        this.userId = userId;
         this.amount = amount;
         this.cardNumber = cardNumber;
         ReceiverCardNumber = receiverCardNumber;
@@ -23,7 +23,7 @@ public class SendingMoney {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long id;
-    public String UserId;
+    public String userId;
     public String amount;
     public String cardNumber;
     public String ReceiverCardNumber;
@@ -33,7 +33,7 @@ public class SendingMoney {
     }
 
     public String getUserId() {
-        return UserId;
+        return userId;
     }
 
     public String getAmount() {
@@ -53,7 +53,7 @@ public class SendingMoney {
     }
 
     public void setUserId(String userId) {
-        UserId = userId;
+        this.userId = userId;
     }
 
     public void setAmount(String amount) {
@@ -66,5 +66,16 @@ public class SendingMoney {
 
     public void setReceiverCardNumber(String receiverCardNumber) {
         ReceiverCardNumber = receiverCardNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "SendingMoney{" +
+                "id=" + id +
+                ", userId='" + userId + '\'' +
+                ", amount='" + amount + '\'' +
+                ", cardNumber='" + cardNumber + '\'' +
+                ", ReceiverCardNumber='" + ReceiverCardNumber + '\'' +
+                '}';
     }
 }

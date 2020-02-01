@@ -1,22 +1,15 @@
-package com.Payment.Payment;
+package kz.iitu.jd3.notifyservice;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.persistence.*;
 
 @Getter
 @Setter
-@Entity
-@Table(name = "Payment")
-public class Payment {
-    public Payment() {
-    }
-
-
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+@NoArgsConstructor
+@AllArgsConstructor
+public class Product {
     public Long id;
     public String userId;
     public String amount;
@@ -74,7 +67,7 @@ public class Payment {
 
     @Override
     public String toString() {
-        return "Payment{" +
+        return "Product{" +
                 "id=" + id +
                 ", userId='" + userId + '\'' +
                 ", amount='" + amount + '\'' +

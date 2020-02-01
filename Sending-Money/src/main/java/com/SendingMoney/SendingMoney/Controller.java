@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/sending")
 public class Controller {
@@ -35,6 +36,11 @@ public class Controller {
         SendingMoney sendingMoney= repository.findById(SendingID)
                 .orElseThrow(() -> new ResourceNotFoundException(" not found for this id :: " + SendingID));
         return sendingMoney;
+    }
+    @GetMapping("/sendings/byUserId/{userId}")
+    public List<SendingMoney> getByUserId(@PathVariable(value = "userId") String userId)
+            throws ResourceNotFoundException {
+        return repository.getAllByUserId(userId);
     }
     @PutMapping("/sendings/{id}")
     public ResponseEntity<SendingMoney> update(@PathVariable(value = "id") Long SendingID,
